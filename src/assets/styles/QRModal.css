@@ -1,3 +1,32 @@
+.modal-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.qr-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.students-container {
+  flex: 1;
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto;
+  font-size: small;
+  text-align: left;
+}
+
+.students-container h6 {
+  margin-bottom: 10px;
+}
+
+.list-group {
+  max-height: 100%;
+  overflow-y: auto;
+}
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -16,8 +45,8 @@
     padding: 25px;
     border-radius: 12px;
     position: relative;
-    width: 90%;
-    max-width: 400px; /* Limit max width for better readability */
+    
+    
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
     animation: fadeIn 0.3s ease-out; /* Smooth fade-in animation */
   }

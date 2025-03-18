@@ -13,7 +13,7 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentMeetingId, setCurrentMeetingId] = useState(null);
-
+  const [students, setStudents] = useState([]);
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -33,6 +33,12 @@ function Home() {
     };
 
     loadInitialData();
+
+    return () => {
+      if (currentMeetingId && qrData[currentMeetingId]?.ws) {
+        qrData[currentMeetingId].ws.close(); // Tutup WebSocket
+      }
+    };
   }, []);
 
   const handleFetchMeetings = async (classId) => {
@@ -48,10 +54,11 @@ function Home() {
     }
   };
 
-  const startQR = (meetingId) => {
+  const startQR = (classId ,meetingId) => {
     if (qrData[meetingId]?.ws) return;
     
-    const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}/generate_qr/${meetingId}`);
+    const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}/generate_qr/${classId}/${meetingId}`);
+    console.log("WEB SOCKET", ws);
     setQrData((prev) => ({ ...prev, [meetingId]: { ws, qr: '', status: 'loading' } }));
     setCurrentMeetingId(meetingId);
     setIsModalOpen(true);
@@ -59,13 +66,20 @@ function Home() {
     ws.onopen = () => console.log('WebSocket connected'); 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      setQrData((prev) => ({
-        ...prev,
-        [meetingId]: { 
-          qr: data.qr || '', 
-          status: data.error ? 'error' : data.complete ? 'complete' : 'active' 
-        },
-      }));
+      if(data.qr){
+        setQrData((prev) => ({
+          ...prev,
+          [meetingId]: {
+            ws, 
+            qr: data.qr || '', 
+            status: data.error ? 'error' : data.complete ? 'complete' : 'active' 
+          },
+        }));
+      } else if(data.attendance){
+        console.log("ATTENDANCE", data.attendance);
+        setStudents(data.attendance);
+      }
+      
     };
 
     ws.onclose = () => {
@@ -76,6 +90,9 @@ function Home() {
   const closeModal = () => {
     if (currentMeetingId && qrData[currentMeetingId]?.ws) {
       qrData[currentMeetingId].ws.close();
+    }
+    if (qrData[currentMeetingId]?.status !== 'complete') {
+      setQrData((prev) => ({ ...prev, [currentMeetingId]: { ...prev[currentMeetingId], status: 'closing' } }));
     }
     setIsModalOpen(false);
     setCurrentMeetingId(null);
@@ -147,11 +164,13 @@ function Home() {
                         <span>{meeting.Ruangan.kode_ruangan}</span>
                         <button
                           className="qr-button"
-                          onClick={() => startQR(pertemuan.id_pertemuan)}
-                          disabled={qrData[pertemuan.id_pertemuan]?.status === 'loading'}
+                          onClick={() => startQR(selectedClass, pertemuan.id_pertemuan)}
+                          disabled={qrData[pertemuan.id_pertemuan]?.status === 'loading' || qrData[pertemuan.id_pertemuan]?.status === 'closing'}
                         >
                           {qrData[pertemuan.id_pertemuan]?.status === 'loading' 
                             ? 'Generating...' 
+                            : qrData[pertemuan.id_pertemuan]?.status === 'closing'
+                            ? 'Closing...'
                             : 'Generate QR'
                           }
                         </button>
@@ -167,6 +186,7 @@ function Home() {
               onClose={closeModal} 
               className={classes.find(cls => cls.id_kelas === selectedClass)?.MataKuliah.nama_matkul}
               meetingNumber={currentMeetingId}
+              students={students}
             >
               {currentMeetingId && qrData[currentMeetingId] && (
                 <QRDisplay qrData={qrData[currentMeetingId]} meetingId={currentMeetingId} />
