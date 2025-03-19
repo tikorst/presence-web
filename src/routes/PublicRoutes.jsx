@@ -6,7 +6,6 @@ const isAuthenticated = () => {
 };
 
 const PublicRoute = () => {
-    console.log(isAuthenticated);
     return isAuthenticated ? <Navigate to="/" /> :<Navigate to="/login" />;
 };
 

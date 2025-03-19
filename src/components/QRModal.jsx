@@ -1,8 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bisa dipindah ke index.js
 import '../assets/styles/QRModal.css'; // Import custom styles
-
-const QRModal = ({ isOpen, onClose, className, meetingNumber, children, students }) => {
+import { FiRefreshCcw } from "react-icons/fi";
+const QRModal = ({ isOpen, onClose, className, meetingNumber, children, students, onRefresh }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,8 +20,14 @@ const QRModal = ({ isOpen, onClose, className, meetingNumber, children, students
                 {children}
               </div>
             </div>
+            <div>
+               <div className='d-flex justify-content-between'>
+                <h6>Daftar Mahasiswa</h6>
+                <button className="refresh-button d-flex" onClick={onRefresh}>
+                    <FiRefreshCcw className="icon" />
+                </button>
+               </div>
             <div className="students-container">
-              <h6>Daftar Mahasiswa</h6>
               <ul className="list-group">
                 {students.map((student) => (
                   <li key={student.id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -33,6 +39,8 @@ const QRModal = ({ isOpen, onClose, className, meetingNumber, children, students
                 ))}
               </ul>
             </div>
+            </div>
+            
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={onClose}>

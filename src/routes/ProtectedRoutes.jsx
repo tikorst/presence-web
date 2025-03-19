@@ -7,7 +7,7 @@ const isAuthenticated = () => {
 };
 
 const ProtectedRoute = () => {
-    console.log(Cookies.get('token'));
+
   return isAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
 };
 
