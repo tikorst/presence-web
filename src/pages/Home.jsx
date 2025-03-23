@@ -10,7 +10,8 @@ import '../assets/styles/Home.css';
 
 function Home() {
   const [classes, setClasses] = useState([]);
-  const [meetings, setMeetings] = useState({});
+  const [meetings, setMeetings] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [selectedClassData, setSelectedClassData] = useState([]);
   const [qrData, setQrData] = useState({});
@@ -48,11 +49,24 @@ function Home() {
   }, [currentMeetingId]);
 
   const handleFetchMeetings = async (classId) => {
-    if (meetings[classId]) return; // Prevent refetching
+    if (meetings[classId]){
+      console.log(schedules);
+      return;
+    } 
     try {
       setLoading(true);
       const meetingData = await fetchMeetings(classId);
       setMeetings((prev) => ({ ...prev, [classId]: meetingData.data }));
+      const schedulesData = {};
+      meetingData.data.forEach(schedule => {
+        if (!schedulesData[classId]) {
+          schedulesData[classId] = {};
+        }
+        schedulesData[classId][schedule.id_jadwal] = schedule;
+      });
+      const flattenedMeetings = meetingData.data.flatMap(cls => cls.Pertemuan);
+      setMeetings((prev) => ({ ...prev, [classId]: flattenedMeetings }));
+      setSchedules(((prev) => ({ ...prev, ...schedulesData })));
     } catch (error) {
       console.error('Error fetching meetings:', error);
     } finally {
@@ -131,6 +145,8 @@ function Home() {
     window.location.href = '/login';
   };
 
+  // const sortedMeetings = selectedClass ? meetings[selectedClass]?.flatMap(schedule => schedule.Pertemuan).sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) : [];
+  const sortedMeetings = selectedClass ? Object.values(schedules[selectedClass] || {}).flatMap(schedule => schedule.Pertemuan).sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) : [];
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
@@ -155,7 +171,8 @@ function Home() {
             <MeetingsPanel
               selectedClass={selectedClass}
               selectedClassData={selectedClassData}
-              meetings={meetings[selectedClass]}
+              meetings={sortedMeetings}
+              schedules={schedules[selectedClass]}
               startQR={startQR}
               qrData={qrData}
               formatDate={formatDate}

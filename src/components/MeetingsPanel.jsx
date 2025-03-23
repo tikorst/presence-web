@@ -1,7 +1,7 @@
 import React from 'react';
 import MeetingRow from './MeetingRow';
 
-const MeetingsPanel = ({ selectedClass, selectedClassData, meetings, startQR, qrData, formatDate, formatTime }) => {
+const MeetingsPanel = ({ selectedClass, selectedClassData, meetings,schedules, startQR, qrData, formatDate, formatTime }) => {
   return (
     <section className="meetings-panel">
       <h2>{selectedClassData.MataKuliah.nama_matkul} - {selectedClassData.nama_kelas}</h2>
@@ -17,19 +17,23 @@ const MeetingsPanel = ({ selectedClass, selectedClassData, meetings, startQR, qr
             <span>Ruangan</span>
             <span>Aksi</span>
           </div>
+          {console.log(meetings)}
           {meetings.map((meeting) =>
-            meeting.pertemuan.map((pertemuan) => (
+            
+             (
               <MeetingRow
-                key={pertemuan.id_pertemuan}
+                key={meeting.id_pertemuan}
                 selectedClass={selectedClass}
-                pertemuan={pertemuan}
-                meeting={meeting}
+                pertemuan={meeting}
+                meeting={meetings}
+                schedule={schedules[meeting.id_jadwal]}
                 startQR={startQR}
                 qrData={qrData}
                 formatDate={formatDate}
                 formatTime={formatTime}
               />
-            ))
+            )
+            
           )}
         </div>
       )}

@@ -1,15 +1,17 @@
 import React from 'react';
 
-const MeetingRow = ({ selectedClass, pertemuan, meeting, startQR, qrData, formatDate, formatTime }) => {
+const MeetingRow = ({ selectedClass, pertemuan, selectedClassData, schedule, startQR, qrData, formatDate, formatTime }) => {
   return (
     <div className="table-row">
       <span>{formatDate(pertemuan.tanggal)}</span>
       <span>
-        {meeting.Sesi.no_sesi}
+        {console.log(schedule)}
+        {
+        schedule.Sesi.no_sesi}
         <br />
-        {formatTime(meeting.Sesi.jam_masuk)} - {formatTime(meeting.Sesi.jam_keluar)}
+        {formatTime(schedule.Sesi.jam_masuk)} - {formatTime(schedule.Sesi.jam_keluar)}
       </span>
-      <span>{meeting.Ruangan.kode_ruangan}</span>
+      <span>{schedule.Ruangan.kode_ruangan}</span>
       <button
         className="qr-button"
         onClick={() => startQR(selectedClass, pertemuan.id_pertemuan)}
