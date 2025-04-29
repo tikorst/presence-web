@@ -119,11 +119,7 @@ h6 {
     font-weight: 400;
   }
   
-  .modal-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   
   /* Fade-in animation */
   @keyframes fadeIn {

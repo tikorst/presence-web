@@ -25,7 +25,8 @@ function Home() {
       try {
         setLoading(true);
         const classesData = await fetchClasses();
-        const flattenedClasses = classesData.classes.flatMap(cls => cls.Kelas);
+        const flattenedClasses = classesData.classes;
+        console.log(flattenedClasses[0]);
         setClasses(flattenedClasses);
         if (flattenedClasses.length > 0) {
           setSelectedClass(flattenedClasses[0].id_kelas);
@@ -145,6 +146,24 @@ function Home() {
     window.location.href = '/login';
   };
 
+  const getMeetingNumber = (meetingId) => {
+    if (!schedules[selectedClass]) return null;
+  
+    // Iterasi melalui jadwal
+    for (const schedule of Object.values(schedules[selectedClass])) {
+      const meeting = schedule.Pertemuan.find(
+        (pertemuan) => pertemuan.id_pertemuan === meetingId
+      );
+  
+      if (meeting) {
+        console.log("meeting", meeting);
+        return meeting.pertemuan_ke; 
+      }
+    }
+  
+    return null; 
+  };
+
   // const sortedMeetings = selectedClass ? meetings[selectedClass]?.flatMap(schedule => schedule.Pertemuan).sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) : [];
   const sortedMeetings = selectedClass ? Object.values(schedules[selectedClass] || {}).flatMap(schedule => schedule.Pertemuan).sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) : [];
   return (
@@ -184,7 +203,7 @@ function Home() {
               isOpen={isModalOpen}
               onClose={closeModal}
               className={classes.find(cls => cls.id_kelas === selectedClass)?.MataKuliah.nama_matkul}
-              meetingNumber={currentMeetingId}
+              meetingNumber={getMeetingNumber(currentMeetingId)}
               students={students} 
               onRefresh={refreshAttendance}
             >

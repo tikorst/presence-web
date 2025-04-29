@@ -1,8 +1,20 @@
 import React from 'react';
 
 const MeetingRow = ({ selectedClass, pertemuan, selectedClassData, schedule, startQR, qrData, formatDate, formatTime }) => {
+  const isToday = (date) => {
+    
+    const today = new Date();
+    const meetingDate = new Date(date);
+    return (
+      today.getFullYear() === meetingDate.getFullYear() &&
+      today.getMonth() === meetingDate.getMonth() &&
+      today.getDate() === meetingDate.getDate()
+    );
+  };
+  
   return (
     <div className="table-row">
+      <span>{pertemuan.pertemuan_ke}</span>
       <span>{formatDate(pertemuan.tanggal)}</span>
       <span>
         {console.log(schedule)}
@@ -15,13 +27,19 @@ const MeetingRow = ({ selectedClass, pertemuan, selectedClassData, schedule, sta
       <button
         className="qr-button"
         onClick={() => startQR(selectedClass, pertemuan.id_pertemuan)}
-        disabled={qrData[pertemuan.id_pertemuan]?.status === 'loading' || qrData[pertemuan.id_pertemuan]?.status === 'closing'}
+        disabled={
+          !isToday(pertemuan.tanggal) ||
+          qrData[pertemuan.id_pertemuan]?.status === 'loading' || 
+          qrData[pertemuan.id_pertemuan]?.status === 'closing' || 
+          pertemuan.status === 'selesai'}
       >
-        {qrData[pertemuan.id_pertemuan]?.status === 'loading'
-          ? 'Generating...'
+        {pertemuan.status === 'selesai'
+          ? 'Selesai'
+          : qrData[pertemuan.id_pertemuan]?.status === 'loading'
+          ? 'Sedang Membuat QR...'
           : qrData[pertemuan.id_pertemuan]?.status === 'closing'
-          ? 'Closing...'
-          : 'Generate QR'}
+          ? 'Menutup...'
+          : 'Buat QR'}
       </button>
     </div>
   );

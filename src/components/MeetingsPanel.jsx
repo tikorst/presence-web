@@ -12,6 +12,7 @@ const MeetingsPanel = ({ selectedClass, selectedClassData, meetings,schedules, s
       ) : (
         <div className="meetings-table">
           <div className="table-header">
+            <span>Pertemuan Ke</span>
             <span>Tanggal</span>
             <span>Sesi</span>
             <span>Ruangan</span>
