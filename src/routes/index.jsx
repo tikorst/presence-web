@@ -12,7 +12,9 @@ const AppRoutes = () => (
   <AuthProvider>
     <Router>
       <Routes>
-        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route element={<PublicRoute/>}>
+          <Route path="/login" element={<Login />} />
+        </Route>
         <Route element={<ProtectedRoute requiredRole="Dosen" />}>
           <Route path="/" element={<Home />} />
         </Route>

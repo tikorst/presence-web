@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/auth';
 import '../assets/styles/Login.css';
+import { AuthContext } from '../context/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
+  const { setRole } = useContext(AuthContext);
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState(''); // State untuk menyimpan pesan error
 
@@ -21,7 +23,7 @@ function Login() {
           return; 
       }else{
         setError(''); 
-        console.log(data.user);
+        setRole(data.user.tipe_user);
         if(data.user.tipe_user === 'Admin'){
           navigate('/admin');
         } else{

@@ -9,6 +9,8 @@ import MeetingsPanel from '../components/MeetingsPanel';
 import '../assets/styles/Home.css';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
 
 function Home() {
   const [classes, setClasses] = useState([]);
@@ -22,7 +24,7 @@ function Home() {
   const [currentMeetingId, setCurrentMeetingId] = useState(null);
   const [students, setStudents] = useState([]);
   const [user, setUser] = useState({});
-  const { role, error: authError, logout: contextLogout } = useContext(AuthContext);
+  const {logout: contextLogout } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
     const loadInitialData = async () => {
@@ -146,9 +148,8 @@ function Home() {
   };
 
   const logout = () => {
-    // Hapus token dan arahkan ke halaman login
-    document.cookie = 
-    contextLogout(); // Reset AuthContext role
+    contextLogout(); 
+    Cookies.remove('token');
     navigate('/login', { replace: true });
   };
 

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../assets/styles/Admin.css';
 import { fetchUsers } from '../api/users';
 import { resetDeviceId } from '../api/resetDeviceId';
-
+import { AuthContext } from '../context/AuthContext';
+import Cookies from 'js-cookie';
 function Admin() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [adminName, setAdminName] = useState('Admin User'); // Mock admin name
+  const [adminName, setAdminName] = useState('Admin User');
+  const {logout: contextLogout } = useContext(AuthContext);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -31,13 +33,15 @@ function Admin() {
   }, []);
 
   const handleResetDevice = async (userId) => {
+    const confirmed = window.confirm('Apakah Anda yakin ingin mereset Device ID untuk pengguna ini?');
+    if (!confirmed) return; // Batal kalau klik "Tidak"
+
     try {
-        
       await resetDeviceId(userId);
-    //   alert('Device ID reset successfully!');
+      alert('Berhasil mereset Device ID untuk pengguna ini.');
     } catch (err) {
-        console.log('Error resetting device ID:', err);
-    //   alert('Failed to reset device ID.');
+      console.log('Error mereset Device ID ', err);
+      alert('Gagal mereset Device ID. Silakan coba lagi.');
     }
   };
 
@@ -47,6 +51,11 @@ function Admin() {
       user.nama.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const logout = () => {
+      contextLogout(); 
+      Cookies.remove('token');
+      navigate('/login', { replace: true });
+    };
   return (
     <div className="admin-container">
       <div className="admin-header">
@@ -58,7 +67,7 @@ function Admin() {
             <button
             className="logout-button"
             onClick={() => {
-                
+                logout();
                 alert('Logging out...');
             }}
             >
