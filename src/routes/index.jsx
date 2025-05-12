@@ -1,26 +1,29 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-
-import Login from '../pages/login';
+import { AuthProvider } from '../context/AuthContext';
+import Login from '../pages/Login';
 import Home from '../pages/Home';
-import ProtectedRoute from './ProtectedRoutes';
-import PublicRoute from './PublicRoutes';
+import Admin from '../pages/Admin';
+import ProtectedRoute from './ProtectedRoute';
+import Unauthorized from '../pages/Unauthorized';
+import PublicRoute from './PublicRoute';
 
-
-const AppRoutes = () => {
-  return (
+const AppRoutes = () => (
+  <AuthProvider>
     <Router>
       <Routes>
-      
-        <Route path="/login" element={<Login />} />
-        <Route element={<ProtectedRoute />}>
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route element={<ProtectedRoute requiredRole="Dosen" />}>
           <Route path="/" element={<Home />} />
         </Route>
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route element={<ProtectedRoute requiredRole="Admin" />}>
+          <Route path="/admin" element={<Admin />} />
+        </Route>
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
-  );
-};
+  </AuthProvider>
+);
 
 export default AppRoutes;

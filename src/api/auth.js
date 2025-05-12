@@ -6,10 +6,8 @@ export const login = async (formData) => {
         body: JSON.stringify(formData),
         credentials: 'include',
       });
-      return response.ok || response.json();
+      return response.json();
     } catch (error) {
-      console.log("masuk error", error)
-      console.error('Login error:', error);
       return null;
     }
   };

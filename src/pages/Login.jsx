@@ -21,15 +21,15 @@ function Login() {
           return; 
       }else{
         setError(''); 
-        navigate('/');
+        console.log(data.user);
+        if(data.user.tipe_user === 'Admin'){
+          navigate('/admin');
+        } else{
+          navigate('/');
+        }
       }
-      // if (data) {
-      //   navigate('/');
-      // } else {
-      //    console.log(data.error)
-      //   setError('Invalid username or password.'); // Set pesan error jika login gagal
-      // }
     } catch (err) {
+      console.error('Login error:', err);
       setError(err.response?.data?.message || 'An unexpected error occurred.');
     }
   };

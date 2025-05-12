@@ -5,6 +5,9 @@
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   width: 300px;
   background: #fff;
   padding: 20px;
@@ -18,9 +21,11 @@
 }
 .user-info {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  margin-top: auto;
+  margin-bottom: 20px;
 }
 .class-list {
   display: flex;
@@ -57,7 +62,6 @@
 
 .main-content {
   flex: 1;
-  padding: 30px;
   overflow-y: auto;
 }
 

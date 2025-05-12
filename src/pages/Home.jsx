@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, use, useContext } from 'react';
 import { fetchClasses } from '../api/classes';
 import { fetchMeetings } from '../api/meetings';
 import { fetchAttendance } from '../api/attendance';
@@ -7,6 +7,8 @@ import QRModal from '../components/QRModal';
 import ClassList from '../components/ClassList';
 import MeetingsPanel from '../components/MeetingsPanel';
 import '../assets/styles/Home.css';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const [classes, setClasses] = useState([]);
@@ -20,13 +22,16 @@ function Home() {
   const [currentMeetingId, setCurrentMeetingId] = useState(null);
   const [students, setStudents] = useState([]);
   const [user, setUser] = useState({});
+  const { role, error: authError, logout: contextLogout } = useContext(AuthContext);
+  const navigate = useNavigate();
   useEffect(() => {
     const loadInitialData = async () => {
       try {
         setLoading(true);
         const classesData = await fetchClasses();
         const flattenedClasses = classesData.classes;
-        console.log(flattenedClasses[0]);
+        setUser(classesData.user);
+        
         setClasses(flattenedClasses);
         if (flattenedClasses.length > 0) {
           setSelectedClass(flattenedClasses[0].id_kelas);
@@ -142,8 +147,9 @@ function Home() {
 
   const logout = () => {
     // Hapus token dan arahkan ke halaman login
-    localStorage.removeItem('token'); // Contoh penghapusan token
-    window.location.href = '/login';
+    document.cookie = 
+    contextLogout(); // Reset AuthContext role
+    navigate('/login', { replace: true });
   };
 
   const getMeetingNumber = (meetingId) => {
@@ -169,6 +175,7 @@ function Home() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
+        
         <h2>Kelas</h2>
         {loading && <div className="loading">Memuat...</div>}
         <ClassList
@@ -179,7 +186,7 @@ function Home() {
           setSelectedClassData={setSelectedClassData}
         />
         <div className="user-info">
-          <span>{user.name}</span>
+          <h5>{user.nama}</h5>
           <button className="btn btn-danger btn-sm" onClick={logout}>Logout</button>
         </div>
       </aside>
