@@ -149,7 +149,7 @@ function Home() {
 
   const logout = () => {
     contextLogout(); 
-    Cookies.remove('token');
+    Cookies.remove('token',  { domain: '.tikorst.cloud', path: '/' });
     navigate('/login', { replace: true });
   };
 
