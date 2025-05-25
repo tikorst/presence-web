@@ -1,45 +1,185 @@
-/* src/components/Login.css */
-.login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* Login.css */
+
+/* --- Variabel Warna (Opsional, tapi direkomendasikan untuk konsistensi) --- */
+:root {
+  --primary-color: #1438d6; /* Hijau yang lebih menarik */
+  --primary-dark: #0a015c;
+  --secondary-color: #2196F3; /* Biru */
+  --background-light: #e9ecef;
+  --text-dark: #333;
+  --text-light: #fff;
+  --border-color: #ced4da;
+  --input-focus-shadow: rgba(76, 175, 80, 0.25); /* Shadow untuk fokus input */
+}
+
+/* --- Container Utama (Full Screen Background) --- */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif; /* Font modern, pastikan di-import dari Google Fonts */
+  color: var(--text-dark);
+}
+
+/* --- Box Login (Card-like) --- */
+.login-box {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 15px; /* Lebih bulat */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Bayangan lebih dalam */
+  width: 100%;
+  max-width: 450px; /* Lebar lebih lega */
+  box-sizing: border-box;
+  text-align: center;
+  animation: fadeInScale 0.6s ease-out forwards; /* Animasi masuk */
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
   }
-  
-  .form-group {
-    margin-bottom: 15px;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
+}
+
+/* --- Header Login --- */
+.login-header {
+  margin-bottom: 30px;
+}
+
+.login-logo {
+  max-width: 100px; /* Ukuran logo */
+  margin-bottom: 20px;
+}
+
+.login-header h2 {
+  font-size: 2.2em;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-weight: 700; /* Lebih tebal */
+}
+
+.login-header p {
+  font-size: 1.1em;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* --- Form --- */
+.login-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  position: relative; /* Penting untuk ikon */
+  margin-bottom: 25px; /* Jarak antar field */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 15px 15px 15px 50px; /* Padding kiri untuk ikon */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1.05em;
+  color: var(--text-dark);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px var(--input-focus-shadow);
+  outline: none;
+}
+
+.input-icon { /* Styling untuk ikon di dalam input */
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 1.2em;
+  pointer-events: none; /* Agar tidak mengganggu klik input */
+}
+
+/* --- Tombol Login --- */
+.login-button {
+  width: 100%;
+  padding: 15px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Footer --- */
+.login-footer {
+  margin-top: 30px;
+  font-size: 0.9em;
+  color: #888;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 500px) {
+  .login-box {
+    padding: 30px 20px;
+    margin: 20px; /* Beri sedikit margin di layar kecil */
   }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+
+  .login-header h2 {
+    font-size: 1.8em;
   }
-  
-  button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+
+  .login-header p {
+    font-size: 1em;
   }
-  
-  button:hover {
-    background-color: #0056b3;
+
+  .form-group input {
+    padding: 12px 12px 12px 45px;
   }
-  
-  .error-message {
-    color: red;
-    margin-bottom: 10px;
-    font-size: 14px;
+
+  .input-icon {
+    left: 15px;
+    font-size: 1.1em;
   }
+
+  .login-button {
+    padding: 12px 15px;
+    font-size: 1.1em;
+  }
+}
+
+/* --- Toastify Custom Styling (Opsional) --- */
+.Toastify__toast--error {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+
+.Toastify__toast--success {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
