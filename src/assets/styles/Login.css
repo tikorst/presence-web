@@ -21,6 +21,7 @@
   color: var(--text-dark);
 }
 
+
 /* --- Box Login (Card-like) --- */
 .login-box {
   background-color: #fff;
@@ -51,7 +52,7 @@
 }
 
 .login-logo {
-  max-width: 100px; /* Ukuran logo */
+  max-width: 300px;
   margin-bottom: 20px;
 }
 

@@ -43,11 +43,12 @@ function Login() {
   };
 
   return (
-    <div className="login-wrapper"> {/* Container utama */}
-      <div className="login-box"> {/* Box konten login */}
+    <div className="login-wrapper"> 
+      <div className="login-box"> 
         <div className="login-header">
           {/* Anda bisa menambahkan logo di sini */}
-          {/* <img src="/path/to/your/logo.png" alt="Logo Aplikasi" className="login-logo" /> */}
+           <img src="/src/assets/logo_presence.png" alt="Logo Aplikasi" className="login-logo" /> 
+          
           <h2>Sistem Presensi QR</h2> {/* Judul lebih spesifik */}
           <p>Silakan login untuk melanjutkan</p>
         </div>
