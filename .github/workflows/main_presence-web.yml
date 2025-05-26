@@ -57,6 +57,18 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_49BBB3765B034ECB886D8F91037D1DAE }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3CDA090B7ADF48D5A599B305BA0D5111 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E0D4DF8A03684B01951BA5ACAF7C550F }}
+      - name: Install Cloudflared
+        run: |
+          echo "--- Installing Cloudflared ---"
+          mkdir -p --mode=0755 /usr/share/keyrings
+          curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+
+          echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+
+          # install cloudflared
+          apt-get update && sudo apt-get install -y cloudflared
+          cloudflared service install eyJhIjoiZWUxYmVhNjJhNjdlMWM0NzdlZjYyNWI0ZTBiZDI3NGYiLCJ0IjoiYThmNDRjMGItMWUzYy00MGY4LWIyMWYtMzg4N2Q4MjdlNGFjIiwicyI6Ik1qSmpNalpsTVRjdFl6ZGhOeTAwTUdZNUxXRTBabUV0WW1JelpXRmpOelJtWWpNMCJ9
+          echo "--- Cloudflared Installation Complete ---"
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
