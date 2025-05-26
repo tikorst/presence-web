@@ -8,7 +8,9 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+env:
+  VITE_API_URL: ${{ env.VITE_API_URL }} 
+  VITE_WS_URL: ${{ env.VITE_WS_URL }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,8 +35,8 @@ jobs:
           npm run build --if-present
           npm run test --if-present
         env:
-          VITE_API_URL: ${{ vars.VITE_API_URL }} 
-          VITE_WS_URL: ${{ vars.VITE_WS_URL }}
+          VITE_API_URL: ${{ env.VITE_API_URL }} 
+          VITE_WS_URL: ${{ env.VITE_WS_URL }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
