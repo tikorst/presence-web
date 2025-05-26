@@ -7,7 +7,7 @@ const PublicRoute = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-message">{error}</p>;
-  if (role === 'Dosen') return <Navigate to="/home" replace />;
+  if (role === 'Dosen') return <Navigate to="/" replace />;
   if (role === 'Admin') return <Navigate to="/admin" replace />;
 
   return <Outlet />;
