@@ -61,4 +61,4 @@ jobs:
           app-name: 'presence-web'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CDFC856B50941BC96D6C71420F43753 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F5C80CDF41084D67950B7E80177044AD }}
