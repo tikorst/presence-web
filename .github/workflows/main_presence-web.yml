@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 env:
   VITE_API_URL: ${{ secrets.VITE_API_URL }} 
-  VITE_WS_URL: ${{ secrets.VITE_WS_URL }
+  VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
 jobs:
   build:
     runs-on: ubuntu-latest
