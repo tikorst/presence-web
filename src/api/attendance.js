@@ -1,6 +1,6 @@
 export const fetchAttendance = async (classId, meetingId) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/attendance/${classId}/${meetingId}`, {
+      const response = await fetch(`https://backend.tikorst.cloud/web/attendance/${classId}/${meetingId}`, {
         credentials: 'include',
       });
       return response.ok ? response.json() : [];

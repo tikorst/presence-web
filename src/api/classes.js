@@ -1,6 +1,6 @@
 export const fetchClasses = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/classes`, {
+      const response = await fetch(`https://backend.tikorst.cloud/web/classes`, {
         credentials: 'include',
       });
       return response.ok ? response.json() : [];

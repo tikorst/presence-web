@@ -96,8 +96,7 @@ function Home() {
     }
 
     setCurrentMeetingId(meetingId);
-    // Ubah import.meta.env.VITE_WS_URL menjadi http://localhost:8080 jika tidak ada
-    const wsUrl = `${import.meta.env.VITE_WS_URL || 'ws://localhost:8080'}/generate_qr/${classId}/${meetingId}`;
+    const wsUrl = `wss://backend.tikorst.cloud/web/generate_qr/${classId}/${meetingId}`;
     const ws = new WebSocket(wsUrl);
     
     setQrData((prev) => ({ ...prev, [meetingId]: { ws, qr: '', status: 'loading' } }));
