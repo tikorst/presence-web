@@ -8,9 +8,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-env:
-  VITE_API_URL: ${{ secrets.VITE_API_URL }} 
-  VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,9 +25,16 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          echo "--- Debugging Build Environment ---"
+          echo "VITE_API_URL: $VITE_API_URL" # Cara cek variabel di Bash
+          echo "VITE_WS_URL: $VITE_WS_URL"
+          echo "--- End Debugging ---"
           npm install
           npm run build --if-present
           npm run test --if-present
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }} 
+          VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
