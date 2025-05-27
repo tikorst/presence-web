@@ -5,6 +5,7 @@ import '../assets/styles/Login.css';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import gambar from '../assets/logo_presence.png'; 
 
 // Import ikon jika Anda menggunakan library seperti Font Awesome atau Material Icons
 // Contoh: import { FaUser, FaLock } from 'react-icons/fa'; // Jika menggunakan react-icons/fa
@@ -47,7 +48,7 @@ function Login() {
       <div className="login-box"> 
         <div className="login-header">
           {/* Anda bisa menambahkan logo di sini */}
-           <img src="/src/assets/logo_presence.png" alt="Logo Aplikasi" className="login-logo" /> 
+           <img src={gambar} alt="Logo Aplikasi" className="login-logo" /> 
           
           <h2>Sistem Presensi QR</h2> {/* Judul lebih spesifik */}
           <p>Silakan login untuk melanjutkan</p>
