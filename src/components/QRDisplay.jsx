@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import '../assets/styles/QRDisplay.css'; 
 import QRDisplayLarge from './QRDisplayLarge';
 
-const QRDisplay = ({ qrData }) => {
+const QRDisplay = ({ qrData, onOpenLargeQR }) => {
   const [showLargeQR, setShowLargeQR] = useState(false);
+
+  const handleOpenLargeQR = () => {
+    setShowLargeQR(true);
+    if (onOpenLargeQR) {
+      onOpenLargeQR();
+    }
+  };
+
   return (
     <div className="qr-display-container"> 
       {qrData?.status === 'active' && qrData.qr ? (
         <>
-          <div className="qr-code-box" onClick={() => setShowLargeQR(true)}> 
+          <div className="qr-code-box" onClick={handleOpenLargeQR}> 
             <img src={`data:image/png;base64,${qrData.qr}`} alt="QR Code" className='qr-image' />
           </div>
 

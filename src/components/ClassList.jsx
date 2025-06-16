@@ -1,32 +1,25 @@
-import React from 'react';
+const ClassList = ({ classes, selectedClass, setSelectedClass, handleFetchMeetings, setSelectedClassData }) => {
+  const handleClassClick = (kelas) => {
+    setSelectedClass(kelas.id_kelas);
+    setSelectedClassData(kelas);
+    handleFetchMeetings(kelas.id_kelas);
+  };
 
-// Opsional: import ikon
-// import { FaBookOpen } from 'react-icons/fa';
-
-const ClassList = ({ classes, selectedClass, setSelectedClass, setSelectedClassData, handleFetchMeetings }) => {
   return (
-    <div className="class-list">
-      {classes.length === 0 ? (
-        <div className="empty-state">Tidak ada kelas yang terdaftar.</div>
-      ) : (
-        classes.map((cls) => (
-          <div
-            key={cls.id_kelas}
-            className={`class-item ${selectedClass === cls.id_kelas ? 'active' : ''}`}
-            onClick={() => {
-              setSelectedClass(cls.id_kelas);
-              setSelectedClassData(cls); // Set data kelas lengkap saat memilih
-              handleFetchMeetings(cls.id_kelas);
-            }}
-          >
-            <div className="class-details">
-              <h3>{cls.MataKuliah.nama_matkul}</h3>
-              <p>{cls.nama_kelas}</p>
+    <>
+      {classes.map((kelas) => (
+        <div
+          key={kelas.id_kelas}
+          className={`class-item ${selectedClass === kelas.id_kelas ? 'selected' : ''}`}
+          onClick={() => handleClassClick(kelas)}
+        >
+          <div className="class-details">
+              <h3>{kelas.MataKuliah.nama_matkul}</h3>
+              <p>{kelas.nama_kelas}</p>
             </div>
-          </div>
-        ))
-      )}
-    </div>
+        </div>
+      ))}
+    </>
   );
 };
 

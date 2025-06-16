@@ -1,297 +1,674 @@
-.qr-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Overlay semi-transparan */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Pastikan di atas konten lain */
-  animation: fadeIn 0.3s ease-out;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.qr-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
 }
 
 .qr-modal-content {
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 15px; /* Sudut membulat */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Bayangan dalam */
-  width: 90%;
-  max-width: 900px; /* Lebar maksimal modal */
-  max-height: 90vh; /* Tinggi maksimal modal */
-  display: flex;
-  flex-direction: column;
-  animation: slideInUp 0.4s ease-out;
-  overflow: hidden; /* Pastikan konten di dalam tidak meluber */
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
 }
 
-@keyframes slideInUp {
-  from { transform: translateY(50px) scale(0.95); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-/* --- Modal Header --- */
 .modal-header-custom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid var(--primary-color); /* Garis bawah solid */
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .modal-title-custom {
-  font-size: 1.8em;
-  color: var(--text-dark);
-  margin: 0;
-  font-weight: 700;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
 }
 
 .close-button-custom {
-  background: none;
-  border: none;
-  font-size: 2.5em; /* Ukuran 'x' lebih besar */
-  color: #6c757d;
-  cursor: pointer;
-  transition: color 0.3s ease, transform 0.2s ease;
-  padding: 0;
-  line-height: 1; /* Mengatur tinggi baris agar 'x' di tengah */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .close-button-custom:hover {
-  color: var(--error-color);
-  transform: rotate(90deg); /* Animasi putar */
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* --- Modal Body --- */
 .modal-body-custom {
-  display: flex;
-  gap: 30px; /* Jarak antar kolom QR dan daftar mahasiswa */
-  flex-grow: 1; /* Agar mengisi ruang yang tersedia */
-  overflow: hidden; /* Jika ada overflow, akan di handle di child */
-}
-
-.qr-section, .students-section {
-  flex: 1; /* Agar membagi ruang secara merata */
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    height: 500px;
 }
 
 .qr-section {
-  justify-content: center; /* Pusat QR code secara vertikal */
-  align-items: center;
-}
-
-.section-title {
-  font-size: 1.3em;
-  color: var(--primary-dark);
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-weight: 600;
-  text-align: center;
+    flex: 1;
+    padding: 30px;
+    background-color: #fafbfc;
+    border-right: 1px solid #e1e5e9;
+    display: flex;
+    flex-direction: column;
 }
 
 .students-section {
-  overflow: hidden; /* Untuk handle scroll pada daftar mahasiswa */
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.students-section.full-width {
+    flex: 1;
+}
+
+.section-title {
+    color: #4a90e2;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
 .students-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.students-header .section-title {
+    margin-bottom: 0;
+}
+
+.qr-display-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+/* Students Actions */
+.students-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 .refresh-button {
-  background-color: var(--secondary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.9em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(142, 68, 173, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .refresh-button:hover {
-  background-color: #1a71c8;
-  transform: translateY(-2px);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(142, 68, 173, 0.4);
+}
+
+.refresh-button:active {
+    transform: translateY(0);
 }
 
 .refresh-icon {
-  font-size: 1.1em;
+    font-size: 14px;
 }
 
+.manual-attendance-button {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.manual-attendance-button:hover {
+    background: linear-gradient(135deg, #ee5a52, #e04848);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.4);
+}
+
+.manual-icon {
+    font-size: 14px;
+}
+
+.toggle-notes-button {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-notes-button:hover {
+    background: linear-gradient(135deg, #138496, #117a8b);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.4);
+}
+
+.toggle-icon {
+    font-size: 14px;
+}
+
+/* Manual Input Form */
+.manual-input-section {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.manual-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+}
+
+.student-select {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    color: #495057;
+}
+
+.student-select:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.reason-input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.reason-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.cancel-button {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.cancel-button:hover {
+    background: #5a6268;
+}
+
+.submit-button {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+}
+
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Students List */
 .students-list-container {
-  flex-grow: 1;
-  overflow-y: auto; /* Scroll jika daftar mahasiswa banyak */
-  padding-right: 5px; /* Ruang untuk scrollbar */
+    flex: 1;
+    overflow-y: auto;
+    margin-right: -10px;
+    padding-right: 10px;
 }
 
 .students-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .student-list-item {
-  background-color: #fcfcfc;
-  padding: 12px 15px;
-  border-radius: 8px;
-  border: 1px solid #f5f5f5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e1e5e9;
+    transition: all 0.2s;
+}
+
+.student-list-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: #d1d5db;
+}
+
+.student-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.student-main-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
 }
 
 .student-name {
-  font-weight: 500;
-  color: var(--text-dark);
-  flex-grow: 1; /* Ambil ruang sebanyak mungkin */
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.student-indicators {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.manual-indicator {
+    font-size: 10px;
+    background: #ffc107;
+    color: #212529;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.note-indicator-static {
+    background: #17a2b8;
+    color: white;
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    box-shadow: 0 1px 3px rgba(23, 162, 184, 0.3);
+    cursor: help;
+}
+
+.note-icon {
+    font-size: 12px;
+}
+
+.student-note {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-left: 3px solid #17a2b8;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    color: #495057;
+    font-style: italic;
+    line-height: 1.4;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 100px;
+    }
+}
+
+.note-text {
+    display: block;
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 .attendance-badge {
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 0.85em;
-  font-weight: 600;
-  color: var(--text-light);
-  min-width: 70px; /* Lebar minimum agar konsisten */
-  text-align: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .attendance-badge.hadir {
-  background-color: var(--success-color);
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 .attendance-badge.alpha {
-  background-color: var(--error-color);
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 .empty-students-message {
-  text-align: center;
-  color: #888;
-  font-style: italic;
-  padding: 20px;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e1e5e9;
 }
 
-/* --- Modal Footer --- */
+/* Modal Footer */
 .modal-footer-custom {
-  padding-top: 20px;
-  margin-top: 20px;
-  border-top: 1px solid var(--border-color);
-  text-align: right; /* Tombol ke kanan */
+    padding: 20px 30px;
+    background-color: #fafbfc;
+    border-top: 1px solid #e1e5e9;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
 }
 
 .close-modal-button {
-  background-color: #6c757d; /* Warna abu-abu yang lebih lembut */
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  padding: 12px 25px;
-  font-size: 1em;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
 }
 
 .close-modal-button:hover {
-  background-color: #5a6268;
-  transform: translateY(-2px);
+    background: #5a6268;
+    transform: translateY(-1px);
 }
 
-/* --- Responsiveness for Modal --- */
+.open-qr-page-button {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.open-qr-page-button:hover {
+    background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+/* Scrollbar Styling */
+.students-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.students-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.students-list-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.students-list-container::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .qr-modal-content {
-    width: 95%;
-    padding: 20px;
-  }
+    .qr-modal-content {
+        margin: 10px;
+    }
 
-  .modal-header-custom {
-    flex-direction: column; /* Judul di atas tombol close */
-    align-items: flex-start;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .modal-title-custom {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
+    .modal-body-custom {
+        flex-direction: column;
+        height: auto;
+        max-height: 70vh;
+    }
+    
+    .qr-section {
+        border-right: none;
+        border-bottom: 1px solid #e1e5e9;
+        padding: 20px;
+    }
+    
+    .students-section {
+        padding: 20px;
+    }
 
-  .close-button-custom {
-    align-self: flex-end; /* Tombol close ke kanan atas */
-    font-size: 2em;
-    margin-top: -30px; /* Posisikan ke atas sedikit */
-    margin-right: -10px;
-  }
+    .modal-header-custom {
+        padding: 16px 20px;
+    }
 
-  .modal-body-custom {
-    flex-direction: column; /* Stack QR dan daftar mahasiswa */
-    gap: 20px;
-  }
+    .modal-title-custom {
+        font-size: 18px;
+    }
 
-  .qr-section, .students-section {
-    width: 100%; /* Lebar penuh */
-  }
+    .section-title {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
 
-  .section-title {
-    font-size: 1.2em;
-  }
+    .students-header {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
 
-  .refresh-button {
-    padding: 6px 10px;
-    font-size: 0.85em;
-  }
+    .modal-footer-custom {
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-  .student-list-item {
-    padding: 10px 12px;
-  }
+    .close-modal-button,
+    .open-qr-page-button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .students-actions {
+        flex-direction: column;
+        gap: 5px;
+        align-items: stretch;
+    }
+
+    .manual-attendance-button,
+    .refresh-button,
+    .toggle-notes-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .toggle-notes-button {
+        order: 3;
+    }
+
+    .manual-input-section {
+        padding: 15px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancel-button,
+    .submit-button {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .student-main-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    
+    .student-indicators {
+        align-self: flex-end;
+    }
+    
+    .student-note {
+        font-size: 11px;
+        padding: 6px 10px;
+        margin-top: 6px;
+    }
+    
+    .note-indicator-static {
+        min-width: 22px;
+        height: 22px;
+    }
+    
+    .note-icon {
+        font-size: 11px;
+    }
+    
+    .manual-indicator {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
 }
 
 @media (max-width: 480px) {
-  .qr-modal-content {
-    padding: 15px;
-  }
-
-  .modal-title-custom {
-    font-size: 1.3em;
-  }
-
-  .section-title {
-    font-size: 1.1em;
-  }
-
-  .student-list-item {
-    font-size: 0.9em;
-  }
-
-  .attendance-badge {
-    padding: 4px 8px;
-    font-size: 0.8em;
-  }
-
-  .close-modal-button {
-    padding: 10px 20px;
-    font-size: 0.9em;
-  }
+    .student-note {
+        font-size: 10px;
+        padding: 5px 8px;
+        margin-top: 5px;
+    }
+    
+    .note-indicator-static {
+        min-width: 20px;
+        height: 20px;
+    }
+    
+    .note-icon {
+        font-size: 10px;
+    }
+    
+    .manual-indicator {
+        font-size: 8px;
+        padding: 1px 5px;
+    }
 }
+

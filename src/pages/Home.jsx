@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { fetchClasses } from '../api/classes';
 import { fetchMeetings } from '../api/meetings';
-import { fetchAttendance } from '../api/attendance';
+import { fetchAttendance, addManualAttendance } from '../api/attendance';
 import QRDisplay from '../components/QRDisplay';
 import QRModal from '../components/QRModal';
 import ClassList from '../components/ClassList';
@@ -10,23 +10,26 @@ import '../assets/styles/Home.css';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer dan toast
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import QRDisplayLarge from '../components/QRDisplayLarge';
 
 
 function Home() {
   const [classes, setClasses] = useState([]);
   const [meetings, setMeetings] = useState([]);
-  const [schedules, setSchedules] = useState({}); // Menginisialisasi sebagai objek kosong
+  const [schedules, setSchedules] = useState({});
   const [selectedClass, setSelectedClass] = useState(null);
-  const [selectedClassData, setSelectedClassData] = useState(null); // Ubah inisialisasi
+  const [selectedClassData, setSelectedClassData] = useState(null); 
   const [qrData, setQrData] = useState({});
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentMeetingId, setCurrentMeetingId] = useState(null);
   const [students, setStudents] = useState([]);
   const [user, setUser] = useState({});
+  const [viewOnlyMode, setViewOnlyMode] = useState(false);
   const { logout: contextLogout } = useContext(AuthContext);
+  const [showLargeQR, setShowLargeQR] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,7 +48,7 @@ function Home() {
         }
       } catch (error) {
         console.error('Error fetching classes:', error);
-        toast.error('Gagal memuat daftar kelas.'); // Toast error
+        toast.error('Gagal memuat daftar kelas.');
       } finally {
         setLoading(false);
       }
@@ -61,7 +64,6 @@ function Home() {
   }, [currentMeetingId]);
 
   const handleFetchMeetings = async (classId) => {
-    // Tidak perlu cek `meetings[classId]` lagi karena `schedules` yang menjadi sumber kebenaran
     if (schedules[classId]) {
       console.log('Meetings already loaded for this class.');
       return;
@@ -76,13 +78,12 @@ function Home() {
       });
       
       setSchedules((prev) => ({ ...prev, [classId]: schedulesForClass }));
-      // Flattened meetings for display in MeetingsPanel
       const flattenedMeetings = meetingData.data.flatMap(schedule => schedule.Pertemuan);
       setMeetings((prev) => ({ ...prev, [classId]: flattenedMeetings }));
 
     } catch (error) {
       console.error('Error fetching meetings:', error);
-      toast.error('Gagal memuat jadwal pertemuan.'); // Toast error
+      toast.error('Gagal memuat jadwal pertemuan.');
     } finally {
       setLoading(false);
     }
@@ -91,17 +92,19 @@ function Home() {
   const startQR = (classId, meetingId) => {
     if (qrData[meetingId]?.ws && qrData[meetingId]?.status !== 'complete') {
         toast.info("QR sudah aktif atau sedang dibuat.");
-        setIsModalOpen(true); // Pastikan modal terbuka jika QR sudah aktif
+        setIsModalOpen(true);
+        setViewOnlyMode(false);
         return;
     }
 
     setCurrentMeetingId(meetingId);
-    const wsUrl = `wss://backend.tikorst.cloud/web/generate_qr/${classId}/${meetingId}`;
+    setViewOnlyMode(false);
+    const wsUrl = `ws://localhost:8443/web/generate_qr/${classId}/${meetingId}`;
     const ws = new WebSocket(wsUrl);
     
     setQrData((prev) => ({ ...prev, [meetingId]: { ws, qr: '', status: 'loading' } }));
     setIsModalOpen(true);
-    toast.info("Membuat QR Code..."); // Toast info saat proses dimulai
+    toast.info("Membuat QR Code...");
     
     ws.onopen = () => {
         console.log('WebSocket connection established.');
@@ -136,11 +139,25 @@ function Home() {
     };
   };
 
+  const viewAttendance = (meetingId) => {
+    setCurrentMeetingId(meetingId);
+    setViewOnlyMode(true);
+    setIsModalOpen(true);
+    toast.info("Memuat daftar kehadiran...");
+  };
+
+
+  const handleOpenLargeQR = () => {
+    setShowLargeQR(true);
+  };
+
+  const closeLargeQR = () => {
+    setShowLargeQR(false);
+  };
   const refreshAttendance = async () => {
     try {
       const attendance = await fetchAttendance(selectedClass, currentMeetingId);
       setStudents(attendance.attendance);
-      // Optional: toast.info("Daftar hadir diperbarui.");
     } catch (error) {
       console.error('Error refreshing attendance:', error);
       toast.error('Gagal memperbarui daftar hadir.');
@@ -148,11 +165,11 @@ function Home() {
   };
 
   const closeModal = () => {
-    if (currentMeetingId && qrData[currentMeetingId]?.ws) {
+    if (currentMeetingId && qrData[currentMeetingId]?.ws && !viewOnlyMode) {
       qrData[currentMeetingId].ws.close();
     }
-    // Jika status bukan 'complete' saat ditutup, set status ke 'closing'
-    if (currentMeetingId && qrData[currentMeetingId]?.status !== 'complete') {
+    
+    if (currentMeetingId && qrData[currentMeetingId]?.status !== 'complete' && !viewOnlyMode) {
       setQrData((prev) => ({ 
         ...prev, 
         [currentMeetingId]: { ...prev[currentMeetingId], status: 'closing' } 
@@ -162,6 +179,25 @@ function Home() {
 
     setIsModalOpen(false);
     setCurrentMeetingId(null);
+    setViewOnlyMode(false);
+  };
+
+  const handleManualAttendance = async (studentId, reason) => {
+    try {
+     const result = await addManualAttendance(selectedClass, currentMeetingId, studentId, reason);
+     if (result.error) {
+        toast.error(result.error);
+        return;
+      } else {
+        toast.success('Kehadiran manual berhasil ditambahkan');
+        await refreshAttendance();
+      }
+      // Refresh attendance list to show the new manual entry
+    } catch (error) {
+      console.error('Error adding manual attendance:', error);
+      toast.error('Terjadi kesalahan saat menambahkan kehadiran manual.');
+      throw error;
+    }
   };
 
   const formatDate = (datetime) => {
@@ -177,7 +213,7 @@ function Home() {
 
   const logout = () => {
     contextLogout(); 
-    Cookies.remove('token', { domain: '.tikorst.cloud', path: '/' }); // Pastikan domain dan path sesuai
+    Cookies.remove('token', { domain: '.tikorst.cloud', path: '/' });
     navigate('/login', { replace: true });
   };
 
@@ -195,8 +231,6 @@ function Home() {
     return null; 
   };
 
-
-  // Pastikan `sortedMeetings` menggunakan `schedules[selectedClass]` sebagai sumber data
   const sortedMeetings = selectedClass 
     ? Object.values(schedules[selectedClass] || {})
       .flatMap(schedule => schedule.Pertemuan)
@@ -207,13 +241,12 @@ function Home() {
     <div className="dashboard-container">
       <aside className="sidebar">
         <div className="sidebar-header">
-          {/* <img src="/path/to/your/app-logo.png" alt="App Logo" className="app-logo" /> */}
           <h3>Sistem Presensi</h3>
         </div>
         
         <nav className="sidebar-nav">
           <h2>Kelas</h2>
-          {loading && <div className="loading-message">Memuat...</div>} {/* Class baru untuk loading */}
+          {loading && <div className="loading-message">Memuat...</div>}
           <ClassList
             classes={classes}
             selectedClass={selectedClass}
@@ -223,46 +256,59 @@ function Home() {
           />
         </nav>
         
-        <div className="user-info-panel"> {/* Panel info user */}
-          {/* <FaUserCircle className="user-avatar-icon" /> */} {/* Ikon user */}
+        <div className="user-info-panel">
           <div className="user-details">
             <h5>{user.nama || 'Loading...'}</h5>
-            <p className="user-role">Dosen</p> {/* Atau sesuaikan jika ada role lain */}
+            <p className="user-role">Dosen</p>
           </div>
           <button className="logout-button" onClick={logout}>
-            {/* <FaSignOutAlt className="logout-icon" /> */}
             Logout
           </button>
         </div>
       </aside>
 
       <main className="main-content">
-        {selectedClass && selectedClassData ? ( // Pastikan selectedClassData tidak null
+        {selectedClass && selectedClassData ? (
           <>
             <MeetingsPanel
               selectedClass={selectedClass}
               selectedClassData={selectedClassData}
               meetings={sortedMeetings}
-              schedules={schedules[selectedClass]} // Pass schedules for the current class
+              schedules={schedules[selectedClass]}
               startQR={startQR}
               qrData={qrData}
               formatDate={formatDate}
               formatTime={formatTime}
+              onViewAttendance={viewAttendance}
             />
 
             <QRModal
               key={`${selectedClass}:${currentMeetingId}`}
               isOpen={isModalOpen}
               onClose={closeModal}
-              className={selectedClassData?.MataKuliah?.nama_matkul} // Akses nama_matkul dengan aman
+              className={selectedClassData?.MataKuliah?.nama_matkul}
               meetingNumber={getMeetingNumber(currentMeetingId)}
               students={students} 
               onRefresh={refreshAttendance}
+              qrData={currentMeetingId ? qrData[currentMeetingId] : null}
+              viewOnlyMode={viewOnlyMode}
+              onOpenLargeQR={handleOpenLargeQR}
+              onManualAttendance={handleManualAttendance}
             >
-              {currentMeetingId && qrData[currentMeetingId] && (
-                <QRDisplay qrData={qrData[currentMeetingId]} meetingId={currentMeetingId} />
+              {currentMeetingId && qrData[currentMeetingId] && !viewOnlyMode && (
+                <QRDisplay 
+                  qrData={qrData[currentMeetingId]} 
+                  meetingId={currentMeetingId} 
+                  onOpenLargeQR={handleOpenLargeQR}
+                  />
               )}
             </QRModal>
+            {showLargeQR && currentMeetingId && qrData[currentMeetingId]?.qr && (
+              <QRDisplayLarge 
+                qrData={qrData[currentMeetingId]} 
+                onClose={closeLargeQR}
+              />
+            )}
           </>
         ) : (
           <div className="empty-state">
@@ -271,7 +317,7 @@ function Home() {
           </div>
         )}
       </main>
-      <ToastContainer position="top-center" autoClose={1000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+      <ToastContainer position="top-center" autoClose={500} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </div>
   );
 }

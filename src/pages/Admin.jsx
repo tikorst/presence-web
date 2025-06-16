@@ -33,7 +33,6 @@ function Admin() {
     const loadUsers = async () => {
       try {
         setLoading(true);
-        // Use debouncedSearchQuery here
         const usersData = await fetchUsers(currentPage, limit, debouncedSearchQuery);
         setUsers(usersData.users);
         setTotalPages(usersData.totalPages);
@@ -42,10 +41,10 @@ function Admin() {
         console.error('Error fetching users:', err);
         if (err.response && err.response.status === 403) {
           navigate('/login', { replace: true });
-          toast.error('Sesi berakhir atau tidak memiliki otorisasi. Silakan login kembali.'); // Gunakan toast untuk error
+          toast.error('Sesi berakhir atau tidak memiliki otorisasi. Silakan login kembali.');
         } else {
           setError('Gagal memuat pengguna. Silakan coba lagi nanti.');
-          toast.error('Gagal memuat pengguna. Silakan coba lagi nanti.'); // Gunakan toast untuk error
+          toast.error('Gagal memuat pengguna. Silakan coba lagi nanti.');
         }
       } finally {
         setLoading(false);
@@ -53,7 +52,7 @@ function Admin() {
     };
 
     loadUsers();
-  }, [currentPage, limit, debouncedSearchQuery, navigate, refreshTrigger]); // Add refreshTrigger to dependencies
+  }, [currentPage, limit, debouncedSearchQuery, navigate, refreshTrigger]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -87,7 +86,6 @@ function Admin() {
       try {
         await resetDeviceId(userId);
         toast.success('Device ID berhasil direset untuk pengguna ini!');
-        // Increment refreshTrigger to force a re-fetch
         setRefreshTrigger(prev => prev + 1);
       } catch (err) {
         console.error('Error resetting Device ID:', err);
@@ -108,8 +106,24 @@ function Admin() {
     setCurrentPage(pageNumber);
   };
 
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          className={`page-btn ${currentPage === i ? 'active' : ''}`}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+    return buttons;
+  };
+
   return (
-    <div className="admin-container">
+    <div className="admin-dashboard-container">
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -122,81 +136,109 @@ function Admin() {
         pauseOnHover
       />
 
-      <div className="admin-header">
-        <div>
+      {/* Header Section */}
+      <div className="header">
+        <div className="header-left">
           <h1>Admin Dashboard</h1>
-          <p className="admin-name">Welcome, {adminName}</p>
+          <p>Welcome, {adminName}</p>
         </div>
-        <div>
-          <button className="logout-button" onClick={logout}>
-            Logout
-          </button>
-        </div>
+        <button className="logout-btn" onClick={logout}>
+          Logout
+        </button>
       </div>
 
+      {/* Divider */}
+      <div className="divider"></div>
+
+      {/* Search Section */}
       <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search by username or name..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        />
+        <div className="search-bar">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search by username or name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
-      {loading && <p className="loading-text">Loading users...</p>}
-      {error && <p className="error-message">{error}</p>}
+      {/* Loading State */}
+      {loading && (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Loading users...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="error-container">
+          <p className="error-message">{error}</p>
+        </div>
+      )}
+
+      {/* Table Section */}
       {!loading && !error && (
-        <div className="table-wrapper">
-          <table className="users-table">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Nama</th>
-                <th>Device ID</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.length > 0 ? (
-                users.map((user) => (
-                  <tr key={user.id_user}>
-                    <td>{user.username}</td>
-                    <td>{user.nama}</td>
-                    <td>{user.device_id || 'N/A'}</td>
-                    <td>{user.device_id_updated_at ? new Date(user.device_id_updated_at).toLocaleString() : 'N/A'}</td>
-                    <td>
-                      <button
-                        className="reset-button"
-                        onClick={() => handleResetDevice(user.username)}
-                      >
-                        Reset Device
-                      </button>
+        <>
+          <div className="table-container">
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Full Name</th>
+                  <th>Device ID</th>
+                  <th>Updated At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <tr key={user.id_user}>
+                      <td>
+                        <span className="username">{user.username}</span>
+                      </td>
+                      <td>{user.nama}</td>
+                      <td>
+                        <span className="device-id">
+                          {user.device_id || 'N/A'}
+                        </span>
+                      </td>
+                      <td>
+                        {user.device_id_updated_at 
+                          ? new Date(user.device_id_updated_at).toLocaleString()
+                          : 'N/A'
+                        }
+                      </td>
+                      <td>
+                        <button
+                          className="reset-btn"
+                          onClick={() => handleResetDevice(user.username)}
+                        >
+                          Reset Device
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="no-users">
+                      No users found.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="no-users">
-                    No users found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <div className="pagination">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                className={`page-button ${currentPage === page ? 'active' : ''}`}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </button>
-            ))}
+                )}
+              </tbody>
+            </table>
           </div>
-        </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              {renderPaginationButtons()}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

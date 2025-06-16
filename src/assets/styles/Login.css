@@ -1,186 +1,188 @@
-/* Login.css */
-
-/* --- Variabel Warna (Opsional, tapi direkomendasikan untuk konsistensi) --- */
-:root {
-  --primary-color: #1438d6; /* Hijau yang lebih menarik */
-  --primary-dark: #0a015c;
-  --secondary-color: #2196F3; /* Biru */
-  --background-light: #e9ecef;
-  --text-dark: #333;
-  --text-light: #fff;
-  --border-color: #ced4da;
-  --input-focus-shadow: rgba(76, 175, 80, 0.25); /* Shadow untuk fokus input */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* --- Container Utama (Full Screen Background) --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .login-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Poppins', sans-serif; /* Font modern, pastikan di-import dari Google Fonts */
-  color: var(--text-dark);
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-
-/* --- Box Login (Card-like) --- */
 .login-box {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 15px; /* Lebih bulat */
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Bayangan lebih dalam */
-  width: 100%;
-  max-width: 450px; /* Lebar lebih lega */
-  box-sizing: border-box;
-  text-align: center;
-  animation: fadeInScale 0.6s ease-out forwards; /* Animasi masuk */
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
 }
 
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* --- Header Login --- */
 .login-header {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .login-logo {
-  max-width: 300px;
-  margin-bottom: 20px;
+    width: 300px;
+    border-radius: 12px;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .login-header h2 {
-  font-size: 2.2em;
-  color: var(--primary-color);
-  margin-bottom: 10px;
-  font-weight: 700; /* Lebih tebal */
+    font-size: 28px;
+    font-weight: 700;
+    color: #1976d2;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
 }
 
 .login-header p {
-  font-size: 1.1em;
-  color: #6c757d;
-  line-height: 1.5;
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
 }
 
-/* --- Form --- */
 .login-form {
-  margin-top: 20px;
+    text-align: left;
 }
 
 .form-group {
-  position: relative; /* Penting untuk ikon */
-  margin-bottom: 25px; /* Jarak antar field */
+    margin-bottom: 20px;
+    position: relative;
+    transition: transform 0.3s ease;
 }
 
 .form-group input {
-  width: 100%;
-  padding: 15px 15px 15px 50px; /* Padding kiri untuk ikon */
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 1.05em;
-  color: var(--text-dark);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e3f2fd;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    color: #333;
 }
 
 .form-group input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px var(--input-focus-shadow);
-  outline: none;
+    outline: none;
+    border-color: #1976d2;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
+    transform: translateY(-2px);
 }
 
-.input-icon { /* Styling untuk ikon di dalam input */
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
-  font-size: 1.2em;
-  pointer-events: none; /* Agar tidak mengganggu klik input */
+.form-group input::placeholder {
+    color: #999;
+    font-size: 15px;
 }
 
-/* --- Tombol Login --- */
 .login-button {
-  width: 100%;
-  padding: 15px 20px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  font-size: 1.2em;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  letter-spacing: 0.5px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
 }
 
 .login-button:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #1565c0, #1976d2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(25, 118, 210, 0.3);
 }
 
 .login-button:active {
-  transform: translateY(0);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
 }
 
-/* --- Footer --- */
+.login-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .login-footer {
-  margin-top: 30px;
-  font-size: 0.9em;
-  color: #888;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #666;
+    font-size: 13px;
+    text-align: center;
 }
 
-/* --- Responsiveness --- */
-@media (max-width: 500px) {
-  .login-box {
-    padding: 30px 20px;
-    margin: 20px; /* Beri sedikit margin di layar kecil */
-  }
-
-  .login-header h2 {
-    font-size: 1.8em;
-  }
-
-  .login-header p {
-    font-size: 1em;
-  }
-
-  .form-group input {
-    padding: 12px 12px 12px 45px;
-  }
-
-  .input-icon {
-    left: 15px;
-    font-size: 1.1em;
-  }
-
-  .login-button {
-    padding: 12px 15px;
-    font-size: 1.1em;
-  }
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 30px 25px;
+        margin: 10px;
+    }
+    
+    .login-header h2 {
+        font-size: 24px;
+    }
+    
+    .form-group input {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+    
+    .login-button {
+        padding: 14px;
+        font-size: 16px;
+    }
+    
+    .login-footer {
+        position: static;
+        margin-top: 40px;
+        transform: none;
+    }
 }
 
-/* --- Toastify Custom Styling (Opsional) --- */
-.Toastify__toast--error {
-  background-color: #dc3545 !important;
-  color: white !important;
-  border-radius: 8px !important;
-  font-weight: 500 !important;
+/* Additional hover effects */
+.login-box:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
-.Toastify__toast--success {
-  background-color: #28a745 !important;
-  color: white !important;
-  border-radius: 8px !important;
-  font-weight: 500 !important;
+/* Form group focus animation */
+.form-group.focused {
+    transform: scale(1.02);
+}
+
+/* Toast container positioning */
+.Toastify__toast-container {
+    z-index: 9999;
 }
