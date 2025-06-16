@@ -123,124 +123,127 @@ function Admin() {
   };
 
   return (
-    <div className="admin-dashboard-container">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+    <div className="admin-wrapper">
+      <div className="admin-dashboard-container">
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
 
-      {/* Header Section */}
-      <div className="header">
-        <div className="header-left">
-          <h1>Admin Dashboard</h1>
-          <p>Welcome, {adminName}</p>
+        {/* Header Section */}
+        <div className="header">
+          <div className="header-left">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome, {adminName}</p>
+          </div>
+          <button className="logout-btn" onClick={logout}>
+            Logout
+          </button>
         </div>
-        <button className="logout-btn" onClick={logout}>
-          Logout
-        </button>
-      </div>
 
-      {/* Divider */}
-      <div className="divider"></div>
+        {/* Divider */}
+        <div className="divider"></div>
 
-      {/* Search Section */}
-      <div className="search-container">
-        <div className="search-bar">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search by username or name..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        {/* Search Section */}
+        <div className="search-container">
+          <div className="search-bar">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search by username or name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Loading State */}
-      {loading && (
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p className="loading-text">Loading users...</p>
-        </div>
-      )}
+        {/* Loading State */}
+        {loading && (
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p className="loading-text">Loading users...</p>
+          </div>
+        )}
 
-      {/* Error State */}
-      {error && !loading && (
-        <div className="error-container">
-          <p className="error-message">{error}</p>
-        </div>
-      )}
+        {/* Error State */}
+        {error && !loading && (
+          <div className="error-container">
+            <p className="error-message">{error}</p>
+          </div>
+        )}
 
-      {/* Table Section */}
-      {!loading && !error && (
-        <>
-          <div className="table-container">
-            <table className="user-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Full Name</th>
-                  <th>Device ID</th>
-                  <th>Updated At</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length > 0 ? (
-                  users.map((user) => (
-                    <tr key={user.id_user}>
-                      <td>
-                        <span className="username">{user.username}</span>
-                      </td>
-                      <td>{user.nama}</td>
-                      <td>
-                        <span className="device-id">
-                          {user.device_id || 'N/A'}
-                        </span>
-                      </td>
-                      <td>
-                        {user.device_id_updated_at 
-                          ? new Date(user.device_id_updated_at).toLocaleString()
-                          : 'N/A'
-                        }
-                      </td>
-                      <td>
-                        <button
-                          className="reset-btn"
-                          onClick={() => handleResetDevice(user.username)}
-                        >
-                          Reset Device
-                        </button>
+        {/* Table Section */}
+        {!loading && !error && (
+          <>
+            <div className="table-container">
+              <table className="user-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Device ID</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.length > 0 ? (
+                    users.map((user) => (
+                      <tr key={user.id_user}>
+                        <td>
+                          <span className="username">{user.username}</span>
+                        </td>
+                        <td>{user.nama}</td>
+                        <td>
+                          <span className="device-id">
+                            {user.device_id || 'N/A'}
+                          </span>
+                        </td>
+                        <td>
+                          {user.device_id_updated_at 
+                            ? new Date(user.device_id_updated_at).toLocaleString()
+                            : 'N/A'
+                          }
+                        </td>
+                        <td>
+                          <button
+                            className="reset-btn"
+                            onClick={() => handleResetDevice(user.username)}
+                          >
+                            Reset Device
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="no-users">
+                        No users found.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="no-users">
-                      No users found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="pagination">
-              {renderPaginationButtons()}
+                  )}
+                </tbody>
+              </table>
             </div>
-          )}
-        </>
-      )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="pagination">
+                {renderPaginationButtons()}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
+    
   );
 }
 

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const response = await fetch(` http://localhost:8443/web/verify-role`, {
+        const response = await fetch(` https://backend.tikorst.cloud/web/verify-role`, {
           method: 'GET',
           credentials: 'include',
         });

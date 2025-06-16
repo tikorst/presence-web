@@ -99,7 +99,7 @@ function Home() {
 
     setCurrentMeetingId(meetingId);
     setViewOnlyMode(false);
-    const wsUrl = `ws://localhost:8443/web/generate_qr/${classId}/${meetingId}`;
+    const wsUrl = `wss://backend.tikorst.cloud/web/generate_qr/${classId}/${meetingId}`;
     const ws = new WebSocket(wsUrl);
     
     setQrData((prev) => ({ ...prev, [meetingId]: { ws, qr: '', status: 'loading' } }));

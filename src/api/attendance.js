@@ -1,6 +1,6 @@
 export const fetchAttendance = async (classId, meetingId) => {
     try {
-      const response = await fetch(`http://localhost:8443/web/attendance/${classId}/${meetingId}`, {
+      const response = await fetch(`https://backend.tikorst.cloud/web/attendance/${classId}/${meetingId}`, {
         credentials: 'include',
       });
       return response.ok ? response.json() : [];
@@ -11,7 +11,7 @@ export const fetchAttendance = async (classId, meetingId) => {
   };
 export const addManualAttendance = async (classId, meetingId, npm, catatan) => {
   try {
-    const response = await fetch(`http://localhost:8443/web/attendance/${classId}/${meetingId}`, {
+    const response = await fetch(`https://backend.tikorst.cloud/web/attendance/${classId}/${meetingId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify ({npm, catatan} ),
