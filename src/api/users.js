@@ -6,7 +6,7 @@ export const fetchUsers = async (page = 1, limit = 10, search = '') => {
       search: search,
     }).toString();
 
-    const url = ` https://backend.tikorst.cloud/web/admin/users?${queryParams}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/admin/users?${queryParams}`;
 
     const response = await fetch(url, {
       credentials: 'include',

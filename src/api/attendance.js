@@ -1,6 +1,6 @@
 export const fetchAttendance = async (classId, meetingId) => {
     try {
-      const response = await fetch(`https://backend.tikorst.cloud/web/attendance/${classId}/${meetingId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/attendance/${classId}/${meetingId}`, {
         credentials: 'include',
       });
       return response.ok ? response.json() : [];
@@ -11,9 +11,9 @@ export const fetchAttendance = async (classId, meetingId) => {
   };
 export const addManualAttendance = async (classId, meetingId, npm, catatan) => {
   try {
-    const response = await fetch(`https://backend.tikorst.cloud/web/attendance/${classId}/${meetingId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/attendance/${classId}/${meetingId}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token' : localStorage.getItem('csrf') },
       body: JSON.stringify ({npm, catatan} ),
       credentials: 'include',
     });
