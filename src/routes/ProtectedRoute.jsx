@@ -8,7 +8,15 @@ const ProtectedRoute = ({ requiredRole }) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-message">{error}</p>;
   if (!role) return <Navigate to="/login" replace />;
-  if (role !== requiredRole) return <Navigate to="/unauthorized" replace />;
+  if (role !== requiredRole){
+    if (role === 'Admin') {
+      return <Navigate to="/admin" replace />;
+    }
+    if (role === 'Dosen') {
+      return <Navigate to="/" replace />;
+    }
+    return <Navigate to="/unauthorized" replace />;
+  }
 
   return <Outlet />;
 };

@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import QRDisplayLarge from '../components/QRDisplayLarge';
 import { logout } from '../api/auth';
-import { Navigate } from 'react-router-dom';
+
 function Home() {
   const [classes, setClasses] = useState([]);
   const [meetings, setMeetings] = useState([]);
@@ -31,11 +31,7 @@ function Home() {
   const { logout: contextLogout } = useContext(AuthContext);
   const [showLargeQR, setShowLargeQR] = useState(false);
   const navigate = useNavigate();
-  const { role } = useContext(AuthContext);
-  
-  if (role === 'Admin') {
-    return <Navigate to="/admin" replace />;
-  }
+
   useEffect(() => {
     const loadInitialData = async () => {
       try {
