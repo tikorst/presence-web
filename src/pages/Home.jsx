@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import QRDisplayLarge from '../components/QRDisplayLarge';
-
+import { logout } from '../api/auth';
 
 function Home() {
   const [classes, setClasses] = useState([]);
@@ -211,9 +211,9 @@ function Home() {
     return `${hours}:${minutes}`;
   };
 
-  const logout = () => {
+  const handleLogout = () => {
+    logout();
     contextLogout(); 
-    Cookies.remove('token', { domain: '.tikorst.cloud', path: '/' });
     navigate('/login', { replace: true });
   };
 
@@ -261,7 +261,7 @@ function Home() {
             <h5>{user.nama || 'Loading...'}</h5>
             <p className="user-role">Dosen</p>
           </div>
-          <button className="logout-button" onClick={logout}>
+          <button className="logout-button" onClick={handleLogout}>
             Logout
           </button>
         </div>

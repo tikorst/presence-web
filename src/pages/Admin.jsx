@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { logout } from '../api/auth';
 import Swal from 'sweetalert2';
 
 function Admin() {
@@ -96,9 +96,9 @@ function Admin() {
     }
   };
 
-  const logout = () => {
-    contextLogout();
-    Cookies.remove('token', { domain: '.tikorst.cloud', path: '/' });
+  const handleLogout = () => {
+    logout();
+    contextLogout(); 
     navigate('/login', { replace: true });
   };
 
@@ -143,7 +143,7 @@ function Admin() {
             <h1>Admin Dashboard</h1>
             <p>Welcome, {adminName}</p>
           </div>
-          <button className="logout-btn" onClick={logout}>
+          <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
         </div>
