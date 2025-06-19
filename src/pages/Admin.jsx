@@ -186,11 +186,11 @@ function Admin() {
               <table className="user-table">
                 <thead>
                   <tr>
-                    <th>Username</th>
-                    <th>Full Name</th>
+                    <th>NPM</th>
+                    <th>Nama Lengkap</th>
                     <th>Device ID</th>
-                    <th>Updated At</th>
-                    <th>Actions</th>
+                    <th>Terakhir Diperbarui</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
