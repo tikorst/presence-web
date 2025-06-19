@@ -208,8 +208,8 @@ function Admin() {
                         </td>
                         <td>
                           {user.device_id_updated_at 
-                            ? <span className="timestamp">{new Date(user.device_id_updated_at).toLocaleString()}</span>
-                            : <span className="timestamp unavailable">N/A</span>
+                            ? <span className="device-id">{new Date(user.device_id_updated_at).toLocaleString()}</span>
+                            : <span className="device-id">N/A</span>
                           }
                         </td>
                         <td>
