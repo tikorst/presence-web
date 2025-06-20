@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,11 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const ProtectedRoute = ({ requiredRole }) => {
   const { role, loading, error } = useContext(AuthContext);
   
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
 
   useEffect(() => {
     if (role && role !== requiredRole) {
@@ -60,7 +55,7 @@ const ProtectedRoute = ({ requiredRole }) => {
       />
       <Outlet />
     </>
-  );;
+  );
 };
 
 export default ProtectedRoute;
