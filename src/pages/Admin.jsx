@@ -141,7 +141,7 @@ function Admin() {
         <div className="header">
           <div className="header-left">
             <h1>Admin Dashboard</h1>
-            <p>Welcome, {adminName}</p>
+            <p>Selamat Datang, {adminName}</p>
           </div>
           <button className="logout-btn" onClick={handleLogout}>
             Logout
@@ -157,7 +157,7 @@ function Admin() {
             <input
               type="text"
               className="search-input"
-              placeholder="Search by username or name..."
+              placeholder="Cari pengguna berdasarkan NPM atau nama..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -168,7 +168,7 @@ function Admin() {
         {loading && (
           <div className="loading-container">
             <div className="loading-spinner"></div>
-            <p className="loading-text">Loading users...</p>
+            <p className="loading-text">Memuat pengguna...</p>
           </div>
         )}
 
