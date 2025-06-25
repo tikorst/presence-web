@@ -90,6 +90,9 @@
     display: flex;
     flex-direction: column;
 }
+.students-list-container.hidden {
+    display: none;
+}
 
 .students-section {
     flex: 1;

@@ -140,9 +140,7 @@ const QRModal = ({ isOpen, onClose, className, meetingNumber, children, students
                   </div>
                 </form>
               </div>
-            )}
-
-            <div className="students-list-container">
+            )}            <div className={`students-list-container ${showManualInput ? 'hidden' : ''}`}>
               {students.length === 0 ? (
                 <p className="empty-students-message">Belum ada mahasiswa yang melakukan presensi.</p>
               ) : (
