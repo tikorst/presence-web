@@ -180,7 +180,7 @@ const MeetingRow = ({ selectedClass, pertemuan, schedule, startQR, qrData, forma
                 className="view-attendance-button"
                 onClick={() => onViewAttendance(pertemuan.id_pertemuan)}
               >
-                Lihat Daftar
+                Lihat Presensi
               </button>
             </>
           ) : (
